@@ -6,6 +6,9 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+import { ClipLoader } from "react-spinners";
 
 const SignIn = () => {
   const primaryColor = "#ff4d2d";
@@ -17,17 +20,38 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleSignIn = async ()=>{
+    setLoading(true);
     try {
         const result=await axios.post(`${serverUrl}/api/auth/signin`,{
             email,
             password
         },{withCredentials:true});
         console.log(result);
+        setErr("");
+        setLoading(false);
     } catch (error) {
-        console.log("SignUp Error:",error);
+        setErr(error?.response?.data?.message);
+        setLoading(false);
     }
   }
+
+  const handleGoogleAuth = async ()=>{
+    
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      try {
+        const {data} = await axios.post(`${serverUrl}/api/auth/google-auth`,{
+          email:result.user.email,
+    
+        },{withCredentials:true});
+        console.log("Google Auth Success:",data);
+      } catch (error) {
+        console.log("Google Auth Error:",error);
+      }
+    }
 
   return (
     <div
@@ -64,6 +88,7 @@ const SignIn = () => {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e)=>setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
 
@@ -83,7 +108,8 @@ const SignIn = () => {
               placeholder="Enter your Password"
               style={{ border: `1px solid ${borderColor}` }}
               onChange={(e)=>setPassword(e.target.value)}
-            value={password}
+              value={password}
+              required
             />
             <button
               className="absolute right-3 cursor-pointer top-3.25 text-grey-500"
@@ -99,12 +125,14 @@ const SignIn = () => {
         </div>
 
         <button
-          className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSignIn}
+          className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSignIn} disabled={loading}
         >
-          SignIn
+          {loading?<ClipLoader size={20} color="white"/>:"Sign In"}
         </button>
+
+        {err && <p className="text-red-500 text-center my-2.5">*{err}</p>}
         
-        <button className="w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 cursor-pointer transition duration-200 border-gray-400 hover:bg-gray-100">
+        <button className="w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-4 py-2 cursor-pointer transition duration-200 border-gray-400 hover:bg-gray-100" onClick={handleGoogleAuth}>
           <FcGoogle size={20}/>
           <span>Sign In with Google</span>
         </button>

@@ -3,6 +3,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "../App";
+import { ClipLoader } from "react-spinners";
 
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
@@ -10,38 +11,51 @@ const ForgotPassword = () => {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [err, setErr] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSendOtp = async() => {
+    setLoading(true);
     try {
         const result = await axios.post(`${serverUrl}/api/auth/send-otp`, { email }, {withCredentials: true});
         console.log(result);
+        setErr("");
         setStep(2);
+        setLoading(false);
     } catch (error) {
-        console.log(error)
+        setErr(error?.response?.data?.message);
     }
   }
 
   const handleVerifyOtp = async() => {
+    setLoading(true);
     try {
         const result = await axios.post(`${serverUrl}/api/auth/verify-otp`, { email, otp }, {withCredentials: true});
         console.log(result);
+        setErr("");
         setStep(3);
+        setLoading(false);
     } catch (error) {
-        console.log(error)
+        setErr(error?.response?.data?.message);
+        setLoading(false);
     }
   }
 
   const handleResetPassword = async() => {
+    setLoading(true);
     if(newPassword!=confirmPassword){
         return null
     }
     try {
         const result = await axios.post(`${serverUrl}/api/auth/reset-password`, { email, newPassword }, {withCredentials: true});
         console.log(result);
+        setErr("");
+        setLoading(false);
         navigate("/signin")
     } catch (error) {
-        console.log(error)
+        setErr(error?.response?.data?.message);
+        setLoading(false);
     }
   }
   return (
@@ -72,13 +86,16 @@ const ForgotPassword = () => {
                 placeholder="Enter your Email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
+                required
               />
             </div>
             <button
-              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSendOtp}
+              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleSendOtp} disabled={loading}
             >
-              Send OTP
+              {loading?<ClipLoader size={20} color="white"/>:"Send OTP"}
             </button>
+
+            {err && <p className="text-red-500 text-center my-2.5">*{err}</p>}
           </div>
         )}
 
@@ -97,13 +114,16 @@ const ForgotPassword = () => {
                 placeholder="Enter OTP"
                 onChange={(e) => setOtp(e.target.value)}
                 value={otp}
+                required
               />
             </div>
             <button
-              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleVerifyOtp}
+              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleVerifyOtp} disabled={loading}
             >
-              Verify OTP
+              {loading?<ClipLoader size={20} color="white"/>:"Verify OTP"}
             </button>
+
+            {err && <p className="text-red-500 text-center my-2.5">*{err}</p>}
           </div>
         )}
 
@@ -137,13 +157,16 @@ const ForgotPassword = () => {
                 placeholder="Confirm Password"
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 value={confirmPassword}
+                required
               />
             </div>
             <button
-              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleResetPassword}
+              className={`w-full mt-4 flex items-center justify-center gap-2 border rounded-lg px-3 py-2 transition-duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`} onClick={handleResetPassword} disabled={loading}
             >
-              Reset Password
+              {loading?<ClipLoader size={20} color="white"/>:"Reset Password"}
             </button>
+
+            {err && <p className="text-red-500 text-center my-2.5">*{err}</p>}
           </div>
         )}
 
