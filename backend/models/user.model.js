@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema(
     mobile: { type: String, required: true },
     role: {
       type: String,
-      enum: ["user", "owner", "deliverBoy"],
+      enum: ["user", "owner", "deliveryBoy"],
       required: true,
     },
     resetOtp:{
