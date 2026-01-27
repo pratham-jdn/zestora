@@ -24,7 +24,7 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch=useDispatch
+  const dispatch=useDispatch()
   const handleSignIn = async ()=>{
     setLoading(true);
     try {

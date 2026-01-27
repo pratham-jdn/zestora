@@ -27,7 +27,7 @@ const SignUp = () => {
   const [mobile, setMobile] = useState("");
   const [err, setErr] = useState("");
   const [loading, setLoading] = useState(false);
-  const dispatch=useDispatch
+  const dispatch=useDispatch()
   const handleSignUp = async ()=>{
     setLoading(true);
     try {
