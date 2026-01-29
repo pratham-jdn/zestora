@@ -11,7 +11,7 @@ import { FaPlus } from "react-icons/fa6";
 import { TbReceiptDollar } from "react-icons/tb";
 
 const Nav = () => {
-  const { userData, city } = useSelector((state) => state.user);
+  const { userData, currentCity } = useSelector((state) => state.user);
   const {myShopData} = useSelector((state)=>state.owner);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
@@ -32,7 +32,7 @@ const Nav = () => {
         <div className="w-[90%] h-17.5 bg-white shadow-xl rounded-lg items-center gap-5 flex fixed top-20 left-[5%] md:hidden">
           <div className="flex items-center w-[30%] overflow-hidden gap-2.5 px-2.5 border-r-2p border-gray-400">
             <IoLocationSharp size={25} className="text-[#ff4d2d]" />
-            <div className="w-[80%] truncate text-gray-600">{city}</div>
+            <div className="w-[80%] truncate text-gray-600">{currentCity}</div>
           </div>
           <div className="w-[80%] flex items-center gap-2.5 px-2.5">
             <IoIosSearch size={25} className="text-[#ff4d2d]" />
@@ -50,7 +50,7 @@ const Nav = () => {
         <div className="md:w-[60%] lg:w-[40%] h-17.5 bg-white shadow-xl rounded-lg items-center gap-5 hidden md:flex">
           <div className="flex items-center w-[30%] overflow-hidden gap-2.5 px-2.5 border-r-2p border-gray-400">
             <IoLocationSharp size={25} className="text-[#ff4d2d]" />
-            <div className="w-[80%] truncate text-gray-600">{city}</div>
+            <div className="w-[80%] truncate text-gray-600">{currentCity}</div>
           </div>
           <div className="w-[80%] flex items-center gap-2.5 px-2.5">
             <IoIosSearch size={25} className="text-[#ff4d2d]" />
