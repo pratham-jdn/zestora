@@ -6,6 +6,7 @@ import { FaUtensils } from "react-icons/fa";
 import { serverUrl } from "../App";
 import axios from "axios";
 import { setMyShopData } from "../redux/ownerSlice";
+import { ClipLoader } from "react-spinners";
 
 const CreateEditShop = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const CreateEditShop = () => {
   const [state,setState] = useState(myShopData?.state || currentState)
   const [frontendImage,setFrontendImage] = useState(myShopData?.image || null)
   const [backendImage,setBackendImage] = useState(null)
+  const [loading,setLoading] = useState(false)
   const dispatch = useDispatch()
 
   const handleImage=(e)=>{
@@ -27,6 +29,7 @@ const CreateEditShop = () => {
 
   const handleSubmit = async (e)=>{
     e.preventDefault();
+    setLoading(true)
     try {
       const formData = new FormData();
       formData.append("name", name);
@@ -38,9 +41,11 @@ const CreateEditShop = () => {
       }
       const result = await axios.post(`${serverUrl}/api/shop/create-edit`, formData, {withCredentials: true});
       dispatch(setMyShopData(result.data))
-      console.log("Shop created/edited successfully:", result.data);
+      setLoading(false)
+      navigate("/")
     } catch (error) {
       console.log("Error creating/editing shop:", error);
+      setLoading(false)
     }
   }
 
@@ -102,8 +107,8 @@ const CreateEditShop = () => {
             value={address}
             />
           </div>
-          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer">
-            Save
+          <button className="w-full bg-[#ff4d2d] text-white px-6 py-3 rounded-lg font-semibold shadow-md hover:bg-orange-600 hover:shadow-lg transition-all duration-200 cursor-pointer" disabled={loading}>
+            {loading?<ClipLoader size={20} color='white'/>:"Save"}
           </button>
         </form>
       </div>
