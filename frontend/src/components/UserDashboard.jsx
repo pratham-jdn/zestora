@@ -4,8 +4,10 @@ import { categories } from "../category";
 import CategoryCard from "./CategoryCard";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { FaArrowCircleRight } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const UserDashboard = () => {
+  const {currentCity} = useSelector(state=>state.user)
   const cateScrollRef = useRef();
   const [showLeftCateButton, setShowLeftCateButton] = useState(false);
   const [showRightCateButton, setShowRightCateButton] = useState(false);
@@ -31,6 +33,11 @@ const UserDashboard = () => {
 
   useEffect(() => {
     if (cateScrollRef.current) {
+      updateButton(
+          cateScrollRef,
+          setShowLeftCateButton,
+          setShowRightCateButton,
+        );
       cateScrollRef.current.addEventListener("scroll", () => {
         updateButton(
           cateScrollRef,
@@ -39,11 +46,19 @@ const UserDashboard = () => {
         );
       });
     }
-  });
+    return ()=>cateScrollRef.current.removeEventListener("scroll",() => {
+        updateButton(
+          cateScrollRef,
+          setShowLeftCateButton,
+          setShowRightCateButton,
+        );
+      })
+  },[categories]);
 
   return (
     <div className="w-screen mih-h-screen flex flex-col gap-5 items-center bg-[#fff9f6] overflow-y-auto">
       <Nav />
+
       <div className="w-full max-w-6xl flex flex-col gap-5 items-start p-2.5">
         <h1 className="text-gray-800 text-2xl sm:text-3xl">
           What are you craving today?
@@ -76,6 +91,14 @@ const UserDashboard = () => {
           )}
         </div>
       </div>
+
+      <div className="w-full max-w-6xl flex flex-col gap-5 items-start p-2.5">
+        <h1 className="text-gray-800 text-2xl sm:text-3xl">
+          Best Shop in {currentCity}
+        </h1>
+
+      </div>
+
     </div>
   );
 };
