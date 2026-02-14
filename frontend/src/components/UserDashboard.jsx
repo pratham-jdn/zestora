@@ -7,7 +7,7 @@ import { FaArrowCircleRight } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const UserDashboard = () => {
-  const {currentCity} = useSelector(state=>state.user)
+  const {currentCity,shopInMyCity} = useSelector(state=>state.user)
   const cateScrollRef = useRef();
   const shopScrollRef = useRef();
   const [showLeftCateButton, setShowLeftCateButton] = useState(false);
@@ -102,7 +102,7 @@ const UserDashboard = () => {
             ref={cateScrollRef}
           >
             {categories.map((cat, index) => (
-              <CategoryCard data={cat} key={index} />
+              <CategoryCard name={cat.category} image={cat.image} key={index} />
             ))}
           </div>
           {showRightCateButton && (
@@ -134,8 +134,8 @@ const UserDashboard = () => {
             className="w-full flex overflow-x-auto gap-4 pb-2"
             ref={shopScrollRef}
           >
-            {categories.map((cat, index) => (
-              <CategoryCard data={cat} key={index} />
+            {shopInMyCity?.map((shop, index) => (
+              <CategoryCard name={shop.name} image={shop.image} key={index} />
             ))}
           </div>
           {showRightShopButton && (
@@ -143,7 +143,7 @@ const UserDashboard = () => {
               className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#ff4d2d] text-white p-2 rounded-full shadow-lg hover:bg-[#e64528] z-10 "
               onClick={() => scrollHandler(shopScrollRef, "right")}
             >
-              <FaArrowCircleRight />
+              <FaArrowCircleRight /> 
             </button>
           )}
         </div>

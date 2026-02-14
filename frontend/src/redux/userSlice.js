@@ -23,7 +23,7 @@ const userSlice = createSlice({
             state.currentAddress = action.payload;
         },
         setShopInMyCity: (state, action) => {
-            state.ShopInMyCity = action.payload;
+            state.shopInMyCity = action.payload;
         }
     }
 })
