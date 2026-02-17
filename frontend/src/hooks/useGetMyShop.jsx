@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react'
 import axios from 'axios';
 import { serverUrl } from '../App.jsx';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMyShopData } from '../redux/ownerSlice.js';
 
 const useGetMyShop = () => {
   const dispatch=useDispatch()
+  const {userData}=useSelector(state=>state.user)
   useEffect(()=>{
     const fetchShop = async()=>{
         try {
@@ -16,7 +17,7 @@ const useGetMyShop = () => {
         }
     }
     fetchShop()
-  },[])
+  },[userData])
 }
 
 export default useGetMyShop
