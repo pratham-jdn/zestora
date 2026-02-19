@@ -22,6 +22,19 @@ const FoodCard = ({ data }) => {
     }
     return stars;
   };
+
+  const handleIncrease = () => {
+    const newQty=quantity+1;
+    setQuantity(newQty)
+  }
+
+  const handleDecrease = () => {
+    if(quantity>0){
+        const newQty=quantity-1;
+        setQuantity(newQty)
+    }
+  }
+
   return (
     <div className="w-62.5 rounded-2xl border-2 border-[#ff4d2d] bg-white shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col">
       <div className="relative w-full h-42.5 flex justify-center items-center bg-white">
@@ -54,15 +67,15 @@ const FoodCard = ({ data }) => {
       <div className="flex items-center justify-between mt-auto p-3">
         <span className="font-bold text-gray-900 text-lg">₹{data.price}</span>
         <div className="flex items-center border rounded-full overflow-hidden shadow-sm">
-          <button className="px-2 py-1 hover:bg-gray-100 transition">
+          <button className="px-2 py-1 hover:bg-gray-100 transition" onClick={handleDecrease}>
             <FaMinus size={12} />
           </button>
           <span>{quantity}</span>
-          <button className="px-2 py-1 hover:bg-gray-100 transition">
+          <button className="px-2 py-1 hover:bg-gray-100 transition" onClick={handleIncrease}>
             <FaPlus size={12} />
           </button>
           <button className="bg-[#ff4d2d] text-white px-3 py-2 transition-colors">
-            <MdOutlineShoppingCart />
+            <MdOutlineShoppingCart size={16}/>
           </button>
         </div>
       </div>
