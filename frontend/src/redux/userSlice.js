@@ -47,9 +47,10 @@ const userSlice = createSlice({
             else{
                 state.cartItems.push(cartItem)
             }
+            console.log(state.cartItems)
         }
     }
 })
 
-export const {setUserData, setCurrentCity, setCurrentState, setCurrentAddress, setShopInMyCity, setItemsInMyCity} = userSlice.actions;
+export const {setUserData, setCurrentCity, setCurrentState, setCurrentAddress, setShopInMyCity, setItemsInMyCity, addToCart} = userSlice.actions;
 export default userSlice.reducer;
